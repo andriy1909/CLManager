@@ -17,7 +17,7 @@ namespace CLManager
         public string toName = "";
         public int port = 587;
         public string login = "";
-        public int timeout = 10000;
+        public int timeout = 20000;
 
         public void Send()
         {
@@ -57,6 +57,7 @@ namespace CLManager
             catch (Exception err)
             {
                 Console.WriteLine(err.Message);
+                Console.ReadLine();
             }
         }
     }

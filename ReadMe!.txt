@@ -19,3 +19,24 @@ ftpmanager [-v] [-p] [-bin] [-buff 2048] [-u login:password] [-PutFtp <FromPATH>
 		 FTPManager -u login:password -To C:\1.txt ftp://hostname/forder/1.txt
 	     FTPManager -save http://site.com/file D:\1.png
 		 FTPManager -run D:\1.txt
+
+
+Отправка Email
+        -sendEmail              Команда для отправки Email.
+        -to             Адресс получателя.
+        -from           Адресс отправителя.
+        -pw             Пароль на Email.
+        -server         SMTP сервер.
+        -subject                Тема письма.
+        -body           Тело письма.
+        -attach         Прикрепленный файл.
+        -fromName               Имя отправителя.
+        -toName         Имя получателя.
+        -port           Порт.
+        -login          Логин.
+        -timeout                Таймаут.
+
+Пример: CLManager -sendEmail -to emailto@mail.com -from emailfrom@mail.com -pw password
+-subject thema
+
+

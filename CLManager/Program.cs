@@ -29,6 +29,23 @@ namespace CLManager
             Console.WriteLine("\t-run\t\t" + "Запустить файл с командами (-run <PATH_file>).");
             Console.WriteLine("\t-V\t\t" + "Версия.");
             Console.WriteLine();
+            Console.WriteLine("Отправка Email");
+            Console.WriteLine("\t-sendEmail\t\t" + "Команда для отправки Email.");
+            Console.WriteLine("\t-to\t\t" + "Адресс получателя.");
+            Console.WriteLine("\t-from\t\t" + "Адресс отправителя.");
+            Console.WriteLine("\t-pw\t\t" + "Пароль на Email.");
+            Console.WriteLine("\t-server\t\t" + "SMTP сервер.");
+            Console.WriteLine("\t-subject\t\t" + "Тема письма.");
+            Console.WriteLine("\t-body\t\t" + "Тело письма.");
+            Console.WriteLine("\t-attach\t\t" + "Прикрепленный файл.");
+            Console.WriteLine("\t-fromName\t\t" + "Имя отправителя.");
+            Console.WriteLine("\t-toName\t\t" + "Имя получателя.");
+            Console.WriteLine("\t-port\t\t" + "Порт.");
+            Console.WriteLine("\t-login\t\t" + "Логин.");
+            Console.WriteLine("\t-timeout\t\t" + "Таймаут.");
+            Console.WriteLine();
+            Console.WriteLine("CLManager -sendEmail -to emailto@mail.com -from emailfrom@mail.com -pw password -subject thema");
+            Main(Console.ReadLine().Split(' '));
         }
 
         static void Main(string[] args)
@@ -40,45 +57,7 @@ namespace CLManager
             {
                 commands.Add(item);
             }
-
-            bool isOpen = false;
-            for (int i = commands.Count - 1; i >= 0; i--)
-            {
-                if (commands[i].Last() == '"' || isOpen)
-                {
-                    isOpen = true;
-                    commands[i]= commands[i].Remove(commands[i].Count());
-                    if(commands[i].First()=='"')
-                    {
-                        isOpen = false;
-                        commands[i] = commands[i].Remove(0,1);
-                    }
-                    if(i>0)
-                    {
-                        commands[i + 1] = commands[i + 1] + commands[i];
-                        //isOpen-falsel=mai
-                            }
-                    commands[i].Remove(commands[i].Count() - 1);
-                }
-            }
-
-            for (int i = 0; i < commands.Count; i++)
-            {
-                if (commands[i].First()=='"')
-                {
-                    isOpen = true;
-                    commands[i].Remove(0, 1);
-                }
-                if (isOpen)
-                {
-                    if (commands[i].Last() == '"')
-                    {
-                        isOpen = false;
-                        commands[i].Remove(commands[i].Count() - 1);
-                    }
-                }
-            }
-
+            
             if (commands.Contains("-sendEmail") || commands.Contains("-sendemail"))
             {
                 try
@@ -91,39 +70,72 @@ namespace CLManager
                         {
                             case "-to":
                                 mail.to = commands[i + 1];
+                                i++;
                                 break;
                             case "-from":
                                 mail.from = commands[i + 1];
+                                i++;
                                 break;
                             case "-pw":
                                 mail.password = commands[i + 1];
+                                i++;
                                 break;
                             case "-server":
                                 mail.server = commands[i + 1];
+                                i++;
                                 break;
                             case "-subject":
+                                if (commands[i + 1].First() == '"' && commands[i + 1].Last() != '"')
+                                {
+                                    for (int j = i + 2; j < commands.Count; j++)
+                                    {
+                                        commands[i + 1] += " " + commands[j];
+                                        if (commands[j].Last() == '"')
+                                            break;
+                                    }
+                                    commands[i + 1].Remove(0, 1);
+                                    commands[i + 1].Remove(commands[i + 1].Count() - 1, 1);
+                                }
                                 mail.subject = commands[i + 1];
                                 break;
                             case "-body":
                                 mail.body = commands[i + 1];
+                                i++;
                                 break;
                             case "-attach":
+                                if (commands[i + 1].First() == '"' && commands[i + 1].Last() != '"')
+                                {
+                                    for (int j = i + 2; j < commands.Count; j++)
+                                    {
+                                        commands[i + 1] += " " + commands[j];
+                                        if (commands[j].Last() == '"')
+                                            break;
+                                    }
+                                    commands[i + 1].Remove(0, 1);
+                                    commands[i + 1].Remove(commands[i + 1].Count() - 1, 1);
+                                }
                                 mail.attach = commands[i + 1];
+                                i++;
                                 break;
                             case "-fromName":
                                 mail.fromName = commands[i + 1];
+                                i++;
                                 break;
                             case "-toName":
                                 mail.toName = commands[i + 1];
+                                i++;
                                 break;
                             case "-port":
                                 mail.port = int.Parse(commands[i + 1]);
+                                i++;
                                 break;
                             case "-login":
                                 mail.login = commands[i + 1];
+                                i++;
                                 break;
                             case "-timeout":
                                 mail.timeout = int.Parse(commands[i + 1]);
+                                i++;
                                 break;
                         }
                     }
@@ -133,6 +145,7 @@ namespace CLManager
                 {
                     Console.WriteLine("Возникла ошибка, " + error.Message);
                     Console.WriteLine("Используйте команду -help для помощи.");
+                    Console.ReadLine();
                 }
 
             }
